@@ -133,7 +133,7 @@ with tab1:  # Tab Kasir
         st.subheader(f"Total Harga: Rp {total_harga:,}")
     
     # Metode pembayaran
-    metode_pembayaran = st.radio("Metode Pembayaran", ["Tunai", "E-Wallet (OVO)", "E-Wallet (Gopay)", "E-Wallet (Dana)"])
+    metode_pembayaran = st.radio("Metode Pembayaran", ["Tunai", "E-Wallet (OVO)", "E-Wallet (Gopay)", "E-Wallet (Dana)", "QRIS"])
     
     # Tombol proses transaksi
     if st.button("Proses Transaksi"):
