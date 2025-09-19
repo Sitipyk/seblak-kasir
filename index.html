@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeblakKu - Sistem Kasir Seblak</title>
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #f7931e;
+            --accent: #ff9f40;
+            --light: #fff3e0;
+            --dark: #333333;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .app-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .app-title i {
+            font-size: 2.5rem;
+        }
+        
+        nav {
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-x: auto;
+        }
+        
+        .nav-tabs li {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .nav-tabs a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-tabs a:hover, .nav-tabs a.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .menu-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-img {
+            height: 180px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9e9e9e;
+        }
+        
+        .menu-details {
+            padding: 15px;
+        }
+        
+        .menu-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .menu-price {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .menu-stock {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stock-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .stock-high {
+            background-color: rgba(40, 167, 69, 0.15);
+            color: var(--success);
+        }
+        
+        .stock-medium {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: var(--warning);
+        }
+        
+        .stock-low {
+            background-color: rgba(220, 53, 69, 0.15);
+            color: var(--danger);
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #757575;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #757575;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tabs li {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-title">
+                <i>🍜</i>
+                <h1>SeblakKu - Sistem Kasir</h1>
+            </div>
+        </header>
+        
+        <nav>
+            <ul class="nav-tabs">
+                <li><a href="#" class="active" data-tab="kasir">Kasir</a></li>
+                <li><a href="#" data-tab="stok">Kelola Stok</a></li>
+                <li><a href="#" data-tab="laporan">Laporan Penjualan</a></li>
+                <li><a href="#" data-tab="statistik">Statistik</a></li>
+                <li><a href="#" data-tab="pengaturan">Pengaturan</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Tab Kasir -->
+        <div id="kasir" class="tab-content active">
+            <h2 class="section-title">Transaksi Kasir</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Pilih Menu</h3>
+                    <div class="form-group">
+                        <label for="menu">Menu Seblak</label>
+                        <select id="menu">
+                            <option value="">-- Pilih Menu --</option>
+                            <option value="seblak_original">Seblak Original - Rp 15.000</option>
+                            <option value="seblak_kerupuk">Seblak Kerupuk - Rp 12.000</option>
+                            <option value="seblak_ceker">Seblak Ceker - Rp 18.000</option>
+                            <option value="seblak_makaroni">Seblak Makaroni - Rp 16.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Pilih Topping</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="topping_kerupuk">
+                                <label for="topping_kerupuk">Kerupuk (+Rp 3.000)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="topping_ceker">
+                                <label for="topping_ceker">Ceker (+Rp 5.000)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="topping_makaroni">
+                                <label for="topping_makaroni">Makaroni (+Rp 4.000)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="topping_sosis">
+                                <label for="topping_sosis">Sosis (+Rp 5.000)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="topping_telur">
+                                <label for="topping_telur">Telur (+Rp 4.000)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Jumlah</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%;">Tambah ke Keranjang</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Keranjang Belanja</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Harga</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Seblak Original</td>
+                                <td>1</td>
+                                <td>Rp 15.000</td>
+                                <td>Rp 15.000</td>
+                            </tr>
+                            <tr>
+                                <td>Kerupuk</td>
+                                <td>1</td>
+                                <td>Rp 3.000</td>
+                                <td>Rp 3.000</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th>Rp 18.000</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div class="form-group">
+                        <label for="payment">Metode Pembayaran</label>
+                        <select id="payment">
+                            <option value="tunai">Tunai</option>
+                            <option value="ovo">OVO</option>
+                            <option value="gopay">GoPay</option>
+                            <option value="dana">DANA</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%;">Proses Pembayaran</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Kelola Stok -->
+        <div id="stok" class="tab-content">
+            <h2 class="section-title">Kelola Stok Bahan</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Stok Menu</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Menu</th>
+                                <th>Stok</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Seblak Original</td>
+                                <td>45</td>
+                                <td><span class="stock-badge stock-high">Banyak</span></td>
+                            </tr>
+                            <tr>
+                                <td>Seblak Kerupuk</td>
+                                <td>22</td>
+                                <td><span class="stock-badge stock-medium">Cukup</span></td>
+                            </tr>
+                            <tr>
+                                <td>Seblak Ceker</td>
+                                <td>8</td>
+                                <td><span class="stock-badge stock-low">Hampir Habis</span></td>
+                            </tr>
+                            <tr>
+                                <td>Seblak Makaroni</td>
+                                <td>15</td>
+                                <td><span class="stock-badge stock-medium">Cukup</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h3>Stok Topping</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Topping</th>
+                                <th>Stok</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kerupuk</td>
+                                <td>85</td>
+                                <td><span class="stock-badge stock-high">Banyak</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ceker</td>
+                                <td>32</td>
+                                <td><span class="stock-badge stock-medium">Cukup</span></td>
+                            </tr>
+                            <tr>
+                                <td>Makaroni</td>
+                                <td>40</td>
+                                <td><span class="stock-badge stock-high">Banyak</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sosis</td>
+                                <td>12</td>
+                                <td><span class="stock-badge stock-medium">Cukup</span></td>
+                            </tr>
+                            <tr>
+                                <td>Telur</td>
+                                <td>5</td>
+                                <td><span class="stock-badge stock-low">Hampir Habis</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Tambah/Update Stok</h3>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="product">Pilih Produk</label>
+                        <select id="product">
+                            <option value="">-- Pilih Produk --</option>
+                            <option value="seblak_original">Seblak Original</option>
+                            <option value="seblak_kerupuk">Seblak Kerupuk</option>
+                            <option value="seblak_ceker">Seblak Ceker</option>
+                            <option value="seblak_makaroni">Seblak Makaroni</option>
+                            <option value="kerupuk">Kerupuk</option>
+                            <option value="ceker">Ceker</option>
+                            <option value="makaroni">Makaroni</option>
+                            <option value="sosis">Sosis</option>
+                            <option value="telur">Telur</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="add_stock">Jumlah Stok Ditambahkan</label>
+                        <input type="number" id="add_stock" min="1" value="10">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary">Update Stok</button>
+            </div>
+        </div>
+        
+        <!-- Tab Laporan Penjualan -->
+        <div id="laporan" class="tab-content">
+            <h2 class="section-title">Laporan Penjualan</h2>
+            
+            <div class="card">
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="report_month">Bulan</label>
+                        <select id="report_month">
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report_year">Tahun</label>
+                        <select id="report_year">
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary">Tampilkan Laporan</button>
+            </div>
+            
+            <div class="card">
+                <h3>Laporan Penjualan Juni 2023</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Menu Terjual</th>
+                            <th>Total Penjualan</th>
+                            <th>Metode Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/06/2023</td>
+                            <td>24</td>
+                            <td>Rp 420.000</td>
+                            <td>OVO (40%), Tunai (35%), GoPay (25%)</td>
+                        </tr>
+                        <tr>
+                            <td>02/06/2023</td>
+                            <td>31</td>
+                            <td>Rp 558.000</td>
+                            <td>GoPay (45%), DANA (30%), Tunai (25%)</td>
+                        </tr>
+                        <tr>
+                            <td>03/06/2023</td>
+                            <td>45</td>
+                            <td>Rp 810.000</td>
+                            <td>Tunai (50%), OVO (30%), GoPay (20%)</td>
+                        </tr>
+                        <tr>
+                            <td>04/06/2023</td>
+                            <td>38</td>
+                            <td>Rp 684.000</td>
+                            <td>DANA (40%), OVO (35%), Tunai (25%)</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>138</th>
+                            <th>Rp 2.472.000</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Tab Statistik -->
+        <div id="statistik" class="tab-content">
+            <h2 class="section-title">Statistik Penjualan</h2>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-label">Total Penjualan Bulan Ini</div>
+                    <div class="stat-value">138</div>
+                    <div class="stat-label">Porsi</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Pendapatan Bulan Ini</div>
+                    <div class="stat-value">Rp 2.472.000</div>
+                    <div class="stat-label">Rupiah</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Menu Terlaris</div>
+                    <div class="stat-value">Seblak Original</div>
+                    <div class="stat-label">45 porsi</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Topping Terlaris</div>
+                    <div class="stat-value">Kerupuk</div>
+                    <div class="stat-label">102 porsi</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Grafik Penjualan per Bulan</h3>
+                <div style="height: 300px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #9e9e9e; margin: 20px 0;">
+                    Grafik Penjualan akan ditampilkan di sini
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Produk yang Paling Banyak Terjual</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produk</th>
+                            <th>Jumlah Terjual</th>
+                            <th>Persentase</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Seblak Original</td>
+                            <td>45</td>
+                            <td>32.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Seblak Ceker</td>
+                            <td>38</td>
+                            <td>27.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Seblak Makaroni</td>
+                            <td>32</td>
+                            <td>23.2%</td>
+                        </tr>
+                        <tr>
+                            <td>Seblak Kerupuk</td>
+                            <td>23</td>
+                            <td>16.7%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Topping yang Paling Banyak Terjual</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Topping</th>
+                            <th>Jumlah Terjual</th>
+                            <th>Persentase</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kerupuk</td>
+                            <td>102</td>
+                            <td>42.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Sosis</td>
+                            <td>65</td>
+                            <td>27.1%</td>
+                        </tr>
+                        <tr>
+                            <td>Telur</td>
+                            <td>45</td>
+                            <td>18.8%</td>
+                        </tr>
+                        <tr>
+                            <td>Makaroni</td>
+                            <td>28</td>
+                            <td>11.6%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Tab Pengaturan -->
+        <div id="pengaturan" class="tab-content">
+            <h2 class="section-title">Pengaturan Sistem</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Integrasi E-Wallet</h3>
+                    
+                    <div class="form-group">
+                        <label for="ovo_api">OVO API Key</label>
+                        <input type="text" id="ovo_api" placeholder="Masukkan API Key OVO">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gopay_api">GoPay API Key</label>
+                        <input type="text" id="gopay_api" placeholder="Masukkan API Key GoPay">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dana_api">DANA API Key</label>
+                        <input type="text" id="dana_api" placeholder="Masukkan API Key DANA">
+                    </div>
+                    
+                    <button class="btn btn-primary">Simpan Pengaturan</button>
+                </div>
+                
+                <div class="card">
+                    <h3>Pengaturan Lainnya</h3>
+                    
+                    <div class="form-group">
+                        <label for="tax">Pajak (%)</label>
+                        <input type="number" id="tax" value="10" min="0" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service_charge">Service Charge (%)</label>
+                        <input type="number" id="service_charge" value="5" min="0" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="receipt_footer">Footer Struk</label>
+                        <textarea id="receipt_footer" rows="3">Terima kasih telah berkunjung!</textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary">Simpan Pengaturan</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Backup Data</h3>
+                <p>Backup data penjualan dan stok secara berkala untuk mencegah kehilangan data.</p>
+                
+                <div class="grid">
+                    <button class="btn btn-outline">Backup Data</button>
+                    <button class="btn btn-outline">Restore Data</button>
+                    <button class="btn btn-outline">Ekspor ke Excel</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>SeblakKu - Sistem Kasir Seblak © 2023. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.nav-tabs a').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-tabs a').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the selected tab content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Example of dynamic stock update (would be connected to backend in real application)
+        function updateStockStatus() {
+            // This would be replaced with actual data from backend
+            const stockItems = document.querySelectorAll('tbody tr');
+            stockItems.forEach(item => {
+                const stockCell = item.cells[1];
+                const statusCell = item.cells[2];
+                const stockValue = parseInt(stockCell.textContent);
+                
+                // Clear existing classes
+                statusCell.querySelector('.stock-badge').className = 'stock-badge';
+                
+                // Apply appropriate class based on stock value
+                if (stockValue >= 20) {
+                    statusCell.querySelector('.stock-badge').classList.add('stock-high');
+                    statusCell.querySelector('.stock-badge').textContent = 'Banyak';
+                } else if (stockValue >= 10) {
+                    statusCell.querySelector('.stock-badge').classList.add('stock-medium');
+                    statusCell.querySelector('.stock-badge').textContent = 'Cukup';
+                } else {
+                    statusCell.querySelector('.stock-badge').classList.add('stock-low');
+                    statusCell.querySelector('.stock-badge').textContent = 'Hampir Habis';
+                }
+            });
+        }
+        
+        // Initialize stock status on page load
+        document.addEventListener('DOMContentLoaded', updateStockStatus);
+    </script>
+</body>
+</html>
